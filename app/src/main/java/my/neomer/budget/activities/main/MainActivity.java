@@ -19,6 +19,8 @@ import java.util.List;
 
 import my.neomer.budget.R;
 import my.neomer.budget.activities.BaseBudgetActivity;
+import my.neomer.budget.core.DataLoader;
+import my.neomer.budget.core.DatabaseTransactionsLoader;
 import my.neomer.budget.models.Transaction;
 
 public class MainActivity extends BaseBudgetActivity
@@ -30,6 +32,7 @@ public class MainActivity extends BaseBudgetActivity
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private TransactionsRecyclerViewAdapter transactionsRecyclerViewAdapter;
+    private List<DataLoader<Transaction>> dataLoaders;
 
     @Override
     protected void loadViews() {
@@ -59,17 +62,17 @@ public class MainActivity extends BaseBudgetActivity
 
         navigationView.setNavigationItemSelectedListener(this);
 
+
         transactionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<Transaction> transactionList = new ArrayList<>();
-        transactionList.add(new Transaction("transaction1", "detailed", 1200));
-        transactionList.add(new Transaction("transaction2", "detailed", 10.23));
-        transactionList.add(new Transaction("transaction3", "detailed", -120));
-        transactionList.add(new Transaction("transaction4", "detailed", 10.23));
-        transactionList.add(new Transaction("transaction5", "detailed", -130.546));
-        transactionList.add(new Transaction("transaction6", "detailed", -1000));
+        dataLoaders = new ArrayList<>();
+        dataLoaders.add(new DatabaseTransactionsLoader());
 
-        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(transactionList);
+        List<Transaction> resultList = new ArrayList<>();
+        for (DataLoader<Transaction> loader : dataLoaders) {
+            resultList.addAll(loader.loadData());
+        }
+        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
     }
 

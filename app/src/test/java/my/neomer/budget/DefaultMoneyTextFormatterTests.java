@@ -18,11 +18,13 @@ public class DefaultMoneyTextFormatterTests {
      * Введенное число должно быть округлено до 2х знаков.
      */
     @Test
-    void CheckLongPrecision() {
+    public void CheckLongPrecision() {
         DefaultMoneyTextFormatter formatter = new DefaultMoneyTextFormatter();
 
         assertEquals("34.22", formatter.formatValue(34.2233));
         assertEquals("34.00", formatter.formatValue(34.0000));
+        assertEquals("34.00", formatter.formatValue(34.0010));
+        assertEquals("34.01", formatter.formatValue(34.0050));
         assertEquals("34.46", formatter.formatValue(34.4567));
         assertEquals("34.46", formatter.formatValue(34.4557));
         assertEquals("34.46", formatter.formatValue(34.4557));
@@ -33,12 +35,14 @@ public class DefaultMoneyTextFormatterTests {
      * При этом должны быть установлены незначащие нули.
      */
     @Test
-    void CheckLessPrecision() {
+    public void CheckLessPrecision() {
         DefaultMoneyTextFormatter formatter = new DefaultMoneyTextFormatter();
 
         assertEquals("34.20", formatter.formatValue(34.2));
         assertEquals("34.00", formatter.formatValue(34.0));
         assertEquals("34.00", formatter.formatValue(34));
+        assertEquals("0.00", formatter.formatValue(0));
+        assertEquals("0.00", formatter.formatValue(-0));
     }
 
 }

@@ -6,7 +6,9 @@ public class DefaultMoneyTextFormatter implements MoneyTextFormatter {
 
     @Override
     public String formatValue(double value) {
-        return String.valueOf(Precision.round(value, 2));
+        double roundedValue = Precision.round(value, 2);
+        int fl = ((int)(roundedValue * 1000)) % 100;
+        return String.valueOf(roundedValue) + (fl > 0 ? "" : "0");
     }
 
 }

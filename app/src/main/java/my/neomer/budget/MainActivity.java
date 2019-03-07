@@ -16,6 +16,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import my.neomer.budget.models.Transaction;
+
 public class MainActivity extends BaseBudgetActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -56,7 +61,13 @@ public class MainActivity extends BaseBudgetActivity
 
         transactionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter();
+        List<Transaction> transactionList = new ArrayList<>();
+        transactionList.add(new Transaction("transaction1", "detailed", 1200));
+        transactionList.add(new Transaction("transaction2", "detailed", 10.23));
+        transactionList.add(new Transaction("transaction3", "detailed", -120));
+        transactionList.add(new Transaction("transaction4", "detailed", -1000));
+
+        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(transactionList);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
     }
 

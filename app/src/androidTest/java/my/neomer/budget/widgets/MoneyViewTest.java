@@ -16,13 +16,13 @@ public class MoneyViewTest {
         return  InstrumentationRegistry.getTargetContext();
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void setMoneyTextFormatter() {
         MoneyView view = new MoneyView(createContext());
         view.setMoneyTextFormatter(null);
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void setMoneyTextStylist() {
         MoneyView view = new MoneyView(createContext());
         view.setMoneyTextFormatter(null);

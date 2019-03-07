@@ -14,6 +14,17 @@ import static org.junit.Assert.*;
 public class DefaultMoneyTextFormatterTests {
 
     /**
+     * Проверка на работу с положительными и отрицательными числами
+     */
+    @Test
+    public void NegativePositiveTest() {
+        DefaultMoneyTextFormatter formatter = new DefaultMoneyTextFormatter();
+
+        assertEquals("-34.22", formatter.formatValue(-34.22));
+        assertEquals("34.22", formatter.formatValue(34.22));
+    }
+
+    /**
      * Тест, проверяющий корректность округления введенной суммы до 2х знаков при вводе суммы с большим числом знаков.
      * Введенное число должно быть округлено до 2х знаков.
      */
@@ -38,6 +49,7 @@ public class DefaultMoneyTextFormatterTests {
     public void CheckLessPrecision() {
         DefaultMoneyTextFormatter formatter = new DefaultMoneyTextFormatter();
 
+        assertEquals("-120.00", formatter.formatValue(-120));
         assertEquals("34.20", formatter.formatValue(34.2));
         assertEquals("34.00", formatter.formatValue(34.0));
         assertEquals("34.00", formatter.formatValue(34));

@@ -19,17 +19,17 @@ public class MoneyView extends android.support.v7.widget.AppCompatTextView {
     public MoneyView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         moneyTextFormatter = new DefaultMoneyTextFormatter();
+        moneyTextStylist = new DefaultMoneyTextStylist();
     }
 
     public MoneyView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         moneyTextFormatter = new DefaultMoneyTextFormatter();
+        moneyTextStylist = new DefaultMoneyTextStylist();
     }
 
     public void setText(double value) {
-        if (value > 0) {
-            super.setText(moneyTextFormatter.formatValue(value));
-        }
+        super.setText(moneyTextFormatter.formatValue(value));
         moneyTextStylist.Stylize(this, value);
     }
 

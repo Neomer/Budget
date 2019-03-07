@@ -1,4 +1,4 @@
-package my.neomer.budget;
+package my.neomer.budget.activities.main;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import my.neomer.budget.R;
 import my.neomer.budget.models.Transaction;
 import my.neomer.budget.widgets.MoneyView;
 

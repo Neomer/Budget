@@ -2,11 +2,7 @@ package my.neomer.budget;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-
-import my.neomer.budget.models.Transaction;
-
-import static org.junit.Assert.*;
+import my.neomer.budget.activities.main.TransactionsRecyclerViewAdapter;
 
 public class TransactionsRecyclerViewAdapterTest {
 

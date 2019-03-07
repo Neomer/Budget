@@ -1,4 +1,4 @@
-package my.neomer.budget;
+package my.neomer.budget.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

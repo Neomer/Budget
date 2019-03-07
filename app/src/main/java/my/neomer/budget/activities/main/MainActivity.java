@@ -1,6 +1,5 @@
-package my.neomer.budget;
+package my.neomer.budget.activities.main;
 
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,7 +10,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +17,8 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import my.neomer.budget.R;
+import my.neomer.budget.activities.BaseBudgetActivity;
 import my.neomer.budget.models.Transaction;
 
 public class MainActivity extends BaseBudgetActivity
@@ -65,7 +65,9 @@ public class MainActivity extends BaseBudgetActivity
         transactionList.add(new Transaction("transaction1", "detailed", 1200));
         transactionList.add(new Transaction("transaction2", "detailed", 10.23));
         transactionList.add(new Transaction("transaction3", "detailed", -120));
-        transactionList.add(new Transaction("transaction4", "detailed", -1000));
+        transactionList.add(new Transaction("transaction4", "detailed", 10.23));
+        transactionList.add(new Transaction("transaction5", "detailed", -130.546));
+        transactionList.add(new Transaction("transaction6", "detailed", -1000));
 
         transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(transactionList);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);

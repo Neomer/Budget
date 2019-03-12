@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +54,10 @@ public class SmsReaderService {
 
     @Nullable
     private Transaction createTransaction(Sms sms) {
+        Log.d("my.neomer.budget", "Parsing SMS '" + sms.getBody() + "'");
         for (TransactionSmsParser parser : transactionSmsParserList) {
             if (parser.isValid(sms)) {
+                Log.d("my.neomer.budget", "Found correct parser: " + parser.getClass().getCanonicalName());
                 try {
                     return parser.createTransaction(sms);
                 } catch (SmsFormatException e) {

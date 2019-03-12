@@ -8,5 +8,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
+    <string name="money_spend">Spend</string>
+    <string name="money_income">Income</string>
+
     <!-- exception messages -->
 </resources>

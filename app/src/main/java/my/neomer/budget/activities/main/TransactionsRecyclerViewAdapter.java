@@ -1,5 +1,6 @@
 package my.neomer.budget.activities.main;
 
+import android.content.Context;
 import android.icu.text.PluralRules;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -36,9 +37,14 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder transactionViewHolder, int i) {
-        transactionViewHolder.txtTransactionName.setText(transactionList.get(i).getTitle());
+        String title = transactionList.get(i).getTitle();
+        transactionViewHolder.txtTransactionName.setText(
+                title != null && !title.isEmpty() ? title :
+                        (transactionList.get(i).getType() == Transaction.TransactionType.Income ?
+                                transactionViewHolder.Context.getString(R.string.money_income) :
+                                transactionViewHolder.Context.getString(R.string.money_spend)));
         transactionViewHolder.txtDetailedText.setText(transactionList.get(i).getDetailed());
-        transactionViewHolder.txtAmount.setText(transactionList.get(i).getAmount().getCurrency().getSymbol() + transactionList.get(i).getAmount().getAmount());
+        transactionViewHolder.txtAmount.setMoney(transactionList.get(i).getAmount());
     }
 
     @Override
@@ -60,6 +66,7 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
         public TextView txtTransactionName;
         public TextView txtDetailedText;
         public MoneyView txtAmount;
+        public Context Context;
 
         public TransactionViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -67,6 +74,7 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
             txtTransactionName = itemView.findViewById(R.id.txtTransactionName);
             txtDetailedText = itemView.findViewById(R.id.txtFullText);
             txtAmount = itemView.findViewById(R.id.txtAmount);
+            Context = itemView.getContext();
         }
     }
 }

@@ -8,7 +8,7 @@ public class CurrencyFactory {
 
     }
 
-    public static Currency getCurrencyByShortname(String name) {
+    public static Currency getCurrencyByShortName(String name) {
         switch (name.toLowerCase()) {
             case "р":
             case "руб":
@@ -26,7 +26,7 @@ public class CurrencyFactory {
         }
     }
 
-    public static Currency getCurrencyByFullname(String name) {
+    public static Currency getCurrencyByFullName(String name) {
         switch (name.toLowerCase()) {
             case "rouble":
                 return new Currency("Rouble", "RUB", Html.fromHtml(" &#x20bd").toString());
@@ -43,7 +43,7 @@ public class CurrencyFactory {
 
     }
 
-    public  static Currency getCurencyByCountry(String country) {
+    public  static Currency getCurrencyByCountry(String country) {
         switch (country.toLowerCase()) {
             case "rus":
             case "russia":

@@ -2,7 +2,6 @@ package my.neomer.budget.core.sms.banks;
 
 import android.support.annotation.NonNull;
 
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -50,18 +49,33 @@ public class BystrobankTransactionSmsParser extends BaseTransactionSmsParser {
 
     @Override
     protected void fillTransaction(@NonNull Matcher matcher, @NonNull Transaction transaction) throws SmsFormatException {
-        String dateTimeString = matcher.group(1).trim();
-        String descriptionString = matcher.group(3).trim();
-        String actionString = matcher.group(4).trim();
-        String sumString = matcher.group(5).trim();
-        String currencyString = matcher.group(7).trim();
-        String billString = matcher.group(8).trim();
-        String cardString = matcher.group(9).trim();
-        String shopString = matcher.group(10).trim();
-        String balanceSumString = matcher.group(11).trim();
-        String balanceCurrencyString = matcher.group(13).trim();
+        String dateTimeString = null;
+        String descriptionString = null;
+        String actionString = null;
+        String sumString = null;
+        String currencyString = null;
+        String billString = null;
+        String cardString = null;
+        String shopString = null;
+        String balanceSumString = null;
+        String balanceCurrencyString = null;
 
-        switch (actionString.toLowerCase()) {
+        try {
+            dateTimeString = matcher.group(1);
+            descriptionString = matcher.group(3);
+            actionString = matcher.group(4);
+            sumString = matcher.group(5);
+            currencyString = matcher.group(7);
+            billString = matcher.group(8);
+            cardString = matcher.group(9);
+            shopString = matcher.group(10);
+            balanceSumString = matcher.group(11);
+            balanceCurrencyString = matcher.group(13);
+        } catch (NullPointerException e) {
+            throw new SmsFormatException(e.getMessage());
+        }
+
+        switch (actionString.trim().toLowerCase()) {
             case "rashod":
             case "pokupka":
                 transaction.setType(Transaction.TransactionType.Spend);
@@ -73,18 +87,30 @@ public class BystrobankTransactionSmsParser extends BaseTransactionSmsParser {
                 throw new SmsFormatException("Unknown transaction type '" + actionString + "'");
         }
 
-        transaction.setDetailed(descriptionString.isEmpty() ? shopString : descriptionString);
-        transaction.setBill(cardString.isEmpty() ? billString : cardString);
+        transaction.setDetailed(descriptionString == null || descriptionString.isEmpty() ? (shopString != null ? shopString.trim()  : "") : descriptionString.trim());
+        transaction.setBill(cardString == null || cardString.isEmpty() ? (billString != null ? billString.trim() : "" ) : cardString.trim());
 
-        try {
-            transaction.setDate(formatter.parseDateTime(dateTimeString));
-        } catch (IllegalArgumentException e) {
-            throw new SmsFormatException("DateTime parsing error '" + dateTimeString + "'");
+        if (dateTimeString != null) {
+            try {
+                transaction.setDate(formatter.parseDateTime(dateTimeString.trim()));
+            } catch (IllegalArgumentException e) {
+                throw new SmsFormatException("DateTime parsing error '" + dateTimeString + "'");
+            }
         }
 
         try {
-            transaction.setAmount(new Money(Double.valueOf(sumString), CurrencyFactory.getCurrencyByShortname(currencyString)));
-            transaction.setBalance(new Money(Double.valueOf(balanceSumString), CurrencyFactory.getCurrencyByShortname(balanceCurrencyString)));
+            if (sumString != null) {
+                transaction.setAmount(
+                        new Money(
+                                transaction.getType() == Transaction.TransactionType.Income ? Double.valueOf(sumString.trim()) : -Double.valueOf(sumString.trim()),
+                                currencyString != null ? CurrencyFactory.getCurrencyByShortName(currencyString.trim()) : null));
+            }
+            if (sumString != null) {
+                transaction.setBalance(
+                        new Money(
+                                Double.valueOf(balanceSumString.trim()),
+                                balanceCurrencyString != null ? CurrencyFactory.getCurrencyByShortName(balanceCurrencyString.trim()) : null));
+            }
         } catch (NumberFormatException e) {
             throw new SmsFormatException("Transaction sum wrong format '" + sumString + "'");
         }

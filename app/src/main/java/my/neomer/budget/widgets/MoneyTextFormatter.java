@@ -1,5 +1,7 @@
 package my.neomer.budget.widgets;
 
+import my.neomer.budget.core.types.Money;
+
 /**
  * Интерфейс для форматирования вывода суммы денег
  */
@@ -10,6 +12,6 @@ public interface MoneyTextFormatter {
      * @param value Сумма
      * @return Форматированное значение
      */
-    String formatValue(double value);
+    String formatValue(Money value);
 
 }

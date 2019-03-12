@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import my.neomer.budget.core.types.Money;
+
 public class MoneyView extends android.support.v7.widget.AppCompatTextView {
 
     private MoneyTextFormatter moneyTextFormatter;
@@ -27,7 +29,7 @@ public class MoneyView extends android.support.v7.widget.AppCompatTextView {
         moneyTextStylist = new DefaultMoneyTextStylist();
     }
 
-    public void setText(double value) {
+    public void setMoney(Money value) {
         super.setText(moneyTextFormatter.formatValue(value));
         moneyTextStylist.Stylize(this, value);
     }

@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import my.neomer.budget.core.sms.banks.exceptions.SmsFormatException;
+import my.neomer.budget.core.types.TransactionCategoryFactory;
 import my.neomer.budget.models.Transaction;
 
 public abstract class BaseTransactionSmsParser implements TransactionSmsParser {
@@ -32,6 +33,8 @@ public abstract class BaseTransactionSmsParser implements TransactionSmsParser {
         {
             fillTransaction(matcher, transaction, sms);
         }
+
+        transaction.setCategory(TransactionCategoryFactory.getInstance().findByPattern(transaction.getDetailed()));
 
         return transaction;
     }

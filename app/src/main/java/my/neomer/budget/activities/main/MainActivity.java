@@ -1,8 +1,11 @@
 package my.neomer.budget.activities.main;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,10 +24,15 @@ import my.neomer.budget.R;
 import my.neomer.budget.activities.BaseBudgetActivity;
 import my.neomer.budget.core.DataLoader;
 import my.neomer.budget.core.DatabaseTransactionsLoader;
+import my.neomer.budget.core.sms.SmsReaderService;
+import my.neomer.budget.core.sms.SmsReaderUpdateListener;
 import my.neomer.budget.models.Transaction;
 
 public class MainActivity extends BaseBudgetActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        SmsReaderUpdateListener {
+
+    private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 0;
 
     private RecyclerView transactionRecyclerView;
     private Toolbar toolbar;
@@ -41,6 +49,19 @@ public class MainActivity extends BaseBudgetActivity
         fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SmsReaderService.getInstance().registerUpdateListener(this);
+        SmsReaderService.getInstance().update();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SmsReaderService.getInstance().clearUpdateListener();
     }
 
     @Override
@@ -74,6 +95,8 @@ public class MainActivity extends BaseBudgetActivity
         }
         transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
+
+        SmsReaderService.getInstance().setContext(this);
     }
 
     @Override
@@ -112,6 +135,28 @@ public class MainActivity extends BaseBudgetActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (permissions.length == 0) {
+            return;
+        }
+        switch (requestCode)
+        {
+            case MY_PERMISSIONS_REQUEST_READ_SMS:
+            {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SmsReaderService.getInstance().update();
+                } else {
+                    SmsReaderService.getInstance().clearUpdateListener();
+                }
+                break;
+            }
+
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -134,5 +179,16 @@ public class MainActivity extends BaseBudgetActivity
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void updateList(List<Transaction> transactionList) {
+        transactionsRecyclerViewAdapter.setTransactionList(transactionList);
+    }
+
+    @Override
+    public void requestSmsPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.READ_SMS}, MY_PERMISSIONS_REQUEST_READ_SMS);
     }
 }

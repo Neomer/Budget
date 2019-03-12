@@ -1,5 +1,6 @@
 package my.neomer.budget.activities.main;
 
+import android.icu.text.PluralRules;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,6 +44,15 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
     @Override
     public int getItemCount() {
         return transactionList.size();
+    }
+
+    public List<Transaction> getTransactionList() {
+        return transactionList;
+    }
+
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
+        notifyDataSetChanged();
     }
 
     public class TransactionViewHolder extends RecyclerView.ViewHolder {

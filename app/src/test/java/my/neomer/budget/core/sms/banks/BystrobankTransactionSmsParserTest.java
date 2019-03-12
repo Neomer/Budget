@@ -27,16 +27,16 @@ public class BystrobankTransactionSmsParserTest {
     public void ValidSpendMessageTest() {
 
         Sms sms = new Sms();
-        sms.setAddress("900");
+        sms.setAddress("BystroBank");
         TransactionSmsParser parser = new BystrobankTransactionSmsParser();
 
-        sms.setBody("ECMC6994 10:12 покупка 85.15р EIG*MYDOMAIN Баланс:1646.41р");
+        sms.setBody("01.03.19 06:40 Komissiya - gashenie Rashod 59.00 RUB Schet 2726149 Balans 23091.72 RUB");
         assertTrue(parser.isValid(sms));
 
-        sms.setBody("ECMC6994 14:08 покупка 84р MAGNIT Баланс:1561.51р");
+        sms.setBody("08.03.19 12:14 Pokupka 1600.00 RUB Schet 2726149 Karta **6654 IP STRIZHOV S.A, Balans 12243.45 RUB");
         assertTrue(parser.isValid(sms));
 
-        sms.setBody("ECMC6994 10:12 покупка 85.15р EIG-MY_D.MAIN Баланс:1646.41р");
+        sms.setBody("08.03.19 13:31 Pokupka 270.00 RUB Schet 2726149 Karta **6654 BUKET Balans 11973.45 RUB");
         assertTrue(parser.isValid(sms));
     }
 }

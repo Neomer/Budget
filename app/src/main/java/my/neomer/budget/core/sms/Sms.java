@@ -6,6 +6,9 @@ import org.joda.time.DateTime;
 
 import java.util.Date;
 
+/**
+ * Модель для чтения смс из системы. Заполняется при чтении папки входящих сообщений с помощью SmsParser.
+ */
 public class Sms {
     private int id;
     private int threadId;

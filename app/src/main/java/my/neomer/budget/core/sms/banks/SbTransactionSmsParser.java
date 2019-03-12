@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import my.neomer.budget.core.sms.BaseTransactionSmsParser;
+import my.neomer.budget.core.sms.Sms;
 import my.neomer.budget.core.sms.banks.exceptions.SmsFormatException;
 import my.neomer.budget.core.types.CurrencyFactory;
 import my.neomer.budget.core.types.Money;
@@ -45,7 +46,7 @@ public class SbTransactionSmsParser extends BaseTransactionSmsParser {
     }
 
     @Override
-    protected void fillTransaction(@NonNull Matcher matcher, @NonNull Transaction transaction) throws SmsFormatException {
+    protected void fillTransaction(@NonNull Matcher matcher, @NonNull Transaction transaction, @NonNull Sms sms) throws SmsFormatException {
         String cardString = null;
         String dateTimeString = null;
         String actionString = null;
@@ -85,7 +86,7 @@ public class SbTransactionSmsParser extends BaseTransactionSmsParser {
 
         if (dateTimeString != null) {
             try {
-                transaction.setDate(formatter.parseDateTime(dateTimeString.trim()));
+                transaction.setDate(sms.getDateSent());
             } catch (IllegalArgumentException e) {
                 throw new SmsFormatException("DateTime parsing error '" + dateTimeString + "'");
             }

@@ -38,12 +38,16 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder transactionViewHolder, int i) {
         String title = transactionList.get(i).getTitle();
+        /*
         transactionViewHolder.txtTransactionName.setText(
                 title != null && !title.isEmpty() ? title :
                         (transactionList.get(i).getType() == Transaction.TransactionType.Income ?
                                 transactionViewHolder.Context.getString(R.string.money_income) :
                                 transactionViewHolder.Context.getString(R.string.money_spend)));
         transactionViewHolder.txtDetailedText.setText(transactionList.get(i).getDetailed());
+        */
+        transactionViewHolder.txtTransactionName.setText(transactionList.get(i).getDetailed());
+        transactionViewHolder.txtDetailedText.setText(transactionList.get(i).getDate().toString("yyyy-MM-dd HH:mm"));
         transactionViewHolder.txtAmount.setMoney(transactionList.get(i).getAmount());
     }
 

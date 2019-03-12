@@ -14,7 +14,7 @@ public abstract class BaseTransactionSmsParser implements TransactionSmsParser {
 
     protected abstract String getRequiredAddress();
 
-    protected abstract void fillTransaction(@NonNull Matcher matcher, @NonNull Transaction transaction) throws SmsFormatException;
+    protected abstract void fillTransaction(@NonNull Matcher matcher, @NonNull Transaction transaction, @NonNull Sms sms) throws SmsFormatException;
 
     @Override
     public boolean isValid(Sms sms) {
@@ -30,7 +30,7 @@ public abstract class BaseTransactionSmsParser implements TransactionSmsParser {
         Matcher matcher = getBodyValidator().matcher(body);
         if (matcher.find())
         {
-            fillTransaction(matcher, transaction);
+            fillTransaction(matcher, transaction, sms);
         }
 
         return transaction;

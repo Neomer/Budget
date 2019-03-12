@@ -2,12 +2,14 @@ package my.neomer.budget.models;
 
 import org.joda.time.DateTime;
 
+import my.neomer.budget.core.types.Money;
+
 public class Transaction {
 
     private String title;
     private String detailed;
-    private double amount;
-    private double balans;
+    private Money amount;
+    private Money balans;
     private DateTime date;
     private String bill;
 
@@ -22,7 +24,7 @@ public class Transaction {
 
     }
 
-    public Transaction(String title, String detailed, double amount) {
+    public Transaction(String title, String detailed, Money amount) {
         this.title = title;
         this.detailed = detailed;
         this.amount = amount;
@@ -44,11 +46,11 @@ public class Transaction {
         this.detailed = detailed;
     }
 
-    public double getAmount() {
+    public Money getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Money amount) {
         this.amount = amount;
     }
 
@@ -60,11 +62,11 @@ public class Transaction {
         this.type = type;
     }
 
-    public double getBalans() {
+    public Money getBalans() {
         return balans;
     }
 
-    public void setBalans(double balans) {
+    public void setBalance(Money balans) {
         this.balans = balans;
     }
 

@@ -20,6 +20,9 @@ public class BystrobankTransactionSmsParserTest {
 
         sms.setBody("27.02.19 15:21 Platezhnoe poruchenie - Z.P. Prihod 10000.00 RUB Schet 2726149 Balans 23492.98 RUB");
         assertTrue(parser.isValid(sms));
+
+        sms.setBody("07.03.19 18:04 Pokupka 825.00 RUB Schet 2726149 Karta **6654 Moscow, DELIVERY-CLUB Balans 14562.45 RUB");
+        assertTrue(parser.isValid(sms));
     }
 
 

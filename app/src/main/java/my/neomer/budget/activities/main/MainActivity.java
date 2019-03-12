@@ -90,9 +90,11 @@ public class MainActivity extends BaseBudgetActivity
         dataLoaders.add(new DatabaseTransactionsLoader());
 
         List<Transaction> resultList = new ArrayList<>();
+        /*
         for (DataLoader<Transaction> loader : dataLoaders) {
             resultList.addAll(loader.loadData());
         }
+        */
         transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
 

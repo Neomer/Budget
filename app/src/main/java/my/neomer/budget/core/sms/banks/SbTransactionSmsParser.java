@@ -1,70 +1,89 @@
 package my.neomer.budget.core.sms.banks;
 
 import android.nfc.FormatException;
+import android.support.annotation.NonNull;
+
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import my.neomer.budget.core.sms.BaseTransactionSmsParser;
 import my.neomer.budget.core.sms.Sms;
 import my.neomer.budget.core.sms.TransactionSmsParser;
 import my.neomer.budget.core.sms.banks.exceptions.SmsFormatException;
+import my.neomer.budget.core.types.CurrencyFactory;
+import my.neomer.budget.core.types.Money;
 import my.neomer.budget.models.Transaction;
+
+    /*
+ECMC6994 14:08 покупка 84р MAGNIT Баланс:1561.51р
+ECMC6994 12:42 покупка 447р FIXPRICE 914 Баланс: 3064.06р
+ECMC6994 12:27 зачисление 13100р Баланс: 14746.41р
+ECMC6994 13:20 Покупка 13100р NAIDY Баланс: 1646.41р
+ECMC6994 14:08 Покупка 84.90р MAGNIT Баланс: 1561.51р
+ECMC6994 19:15 Покупка 381.80р MAGNIT Баланс: 1179.71р
+ECMC6994 19:15 Покупка 381.80р MAGNIT Баланс: 1179.71р
+ECMC6994 08:17 списание 100р Баланс: 1079.71р
+ECMC6994 16:23 Покупка 139.90р MAGNIT Баланс: 939.81р
+ECMC6994 08:17 списание 100р Баланс: 1079.71р
+     */
 
 /**
  * Парсер для СМС от Сбербанка
  */
-public class SbTransactionSmsParser implements TransactionSmsParser {
+public class SbTransactionSmsParser extends BaseTransactionSmsParser {
 
-    //ECMC6994 14:08 покупка 84р MAGNIT Баланс:1561.51р
+    private DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
     @Override
-    public boolean isValid(Sms sms) {
-        return sms.getAddress()!= null && sms.getAddress().equals("900") &&
-                sms.getBody() != null && sms.getBody().matches("^ECMC\\d{4}\\s+(\\d{2}:\\d{2})\\s+(покупка|зачисление)\\s+(\\d+(\\.\\d{1,2})?\\s*[а-яА-Я\\w]+)(\\s+[а-яА-Я\\d\\w\\*\\-\\_\\.]+)*\\s+(Баланс:(\\d+(\\.\\d{1,2})?\\s*[а-яА-Я\\w]+))$");
+    protected Pattern getBodyValidator() {
+        return Pattern.compile("^ECMC(\\d+)\\s+(\\d{2}:\\d{2})\\s+([пП]окупка|[зЗ]ачисление|[сС]писание)\\s+(\\d+(\\.\\d+)?)(\\s*[а-яА-Я\\w]+)((\\s+[а-яА-Я\\w\\-\\_\\.\\,\\*]+)*)\\s[бБ]аланс:\\s*(\\d+(\\.\\d+)?)(\\s*[а-яА-Я\\w]+)$");
     }
 
     @Override
-    public Transaction createTransaction(Sms sms) throws SmsFormatException {
-        String[] parts = sms.getBody().split(" ");
+    protected String getRequiredAddress() {
+        return "900";
+    }
 
-        Transaction res = new Transaction();
+    @Override
+    protected void fillTransaction(@NonNull Matcher matcher, @NonNull Transaction transaction) throws SmsFormatException {
+        String cardString = matcher.group(1).trim();
+        String dateTimeString = matcher.group(2).trim();
+        String actionString = matcher.group(3).trim();
+        String sumString = matcher.group(4).trim();
+        String currencyString = matcher.group(6).trim();
+        String shopString = matcher.group(7).trim();
+        String balanceSumString = matcher.group(9).trim();
+        String balanceCurrencyString = matcher.group(11).trim();
 
-        String body = sms.getBody();
-        int sp = body.indexOf(' '), sp2 = 0;
-        String part = body.substring(0, sp);
-        if (!Pattern.compile("ECMC\\d{4}").matcher(part).matches()) {
-            throw new SmsFormatException();
+        switch (actionString.toLowerCase()) {
+            case "покупка":
+            case "списание":
+                transaction.setType(Transaction.TransactionType.Spend);
+                break;
+            case "зачисление":
+                transaction.setType(Transaction.TransactionType.Income);
+                break;
+            default:
+                throw new SmsFormatException("Unknown transaction type '" + actionString + "'");
         }
-        res.setBill(part);
-        sp2 = sp;
 
-        sp = body.indexOf(' ', sp2);
-        body.substring(0, sp - sp2);
-        sp2 = sp;
+        transaction.setDetailed(shopString);
+        transaction.setBill(cardString);
 
-        sp = body.indexOf(' ', sp2);
-        String typeString = body.substring(0, sp - sp2).toLowerCase();
-        if (typeString == "покупка") {
-            res.setType(Transaction.TransactionType.Spend);
-        } else if (typeString == "зачисление") {
-            res.setType(Transaction.TransactionType.Income);
-        } else {
-            throw new SmsFormatException();
+        try {
+            transaction.setDate(formatter.parseDateTime(dateTimeString));
+        } catch (IllegalArgumentException e) {
+            throw new SmsFormatException("DateTime parsing error '" + dateTimeString + "'");
         }
-        sp2 = sp;
 
-        sp = body.indexOf(' ', sp2);
-        part = body.substring(0, sp - sp2);
-        if (!Pattern.compile("(\\d+(\\.\\d{1,2})?\\s*[а-яА-Я\\w]+)").matcher(part).matches()) {
-            throw new SmsFormatException();
+        try {
+            transaction.setAmount(new Money(Double.valueOf(sumString), CurrencyFactory.getCurrencyByShortname(currencyString)));
+            transaction.setBalance(new Money(Double.valueOf(balanceSumString), CurrencyFactory.getCurrencyByShortname(balanceCurrencyString)));
+        } catch (NumberFormatException e) {
+            throw new SmsFormatException("Transaction sum wrong format '" + sumString + "'");
         }
-        Matcher m = Pattern.compile("\\d+(\\.\\d{1,2})").matcher(part);
-        if (!m.find()) {
-            throw new SmsFormatException();
-        }
-        res.setAmount(Double.valueOf(m.group()));
-        sp2 = sp;
-
-        return res;
     }
 }

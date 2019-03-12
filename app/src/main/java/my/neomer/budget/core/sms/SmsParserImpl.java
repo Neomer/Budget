@@ -27,13 +27,13 @@ class SmsParserImpl implements SmsParser {
                 if (column.equals(COLUMN_ID)) {
                     result.setId(cursor.getInt(idx));
                 } else if (column.equals(COLUMN_DATE)) {
-                    result.setDate(dateTimeParser.parseDate(cursor.getString(idx)));
+                    result.setDate(dateTimeParser.parseDate(cursor.getString(idx).trim()));
                 } else if (column.equals(COLUMN_DATE_SENT)) {
-                    result.setDateSent(dateTimeParser.parseDate(cursor.getString(idx)));
+                    result.setDateSent(dateTimeParser.parseDate(cursor.getString(idx).trim()));
                 } else if (column.equals(COLUMN_BODY)) {
-                    result.setBody(cursor.getString(idx));
+                    result.setBody(cursor.getString(idx).trim());
                 } else if (column.equals(COLUMN_ADDRESS)) {
-                    result.setAddress(cursor.getString(idx));
+                    result.setAddress(cursor.getString(idx).trim());
                 }
             }
         }

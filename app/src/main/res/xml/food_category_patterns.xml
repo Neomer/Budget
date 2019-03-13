@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Category xmlns:android="http://schemas.android.com/apk/res/android">
-    <Pattern>\.*delivery[\-\s]*club\.*</Pattern>
-    <Pattern>\b\.*MAGNIT\.*\b</Pattern>
+    <Pattern>\\.*delivery[\\-\\s]*club\\.*</Pattern>
+    <Pattern>\\bMAGNIT\\b</Pattern>
+    <Pattern>\\bgastronom\\b</Pattern>
+    <Pattern>\\bpyaterochka\\b</Pattern>
+    <Pattern>\\b\\.*beerloga\\.*\\b</Pattern>
+    <Pattern>\\bauchan\\b</Pattern>
+    <Pattern>\\bpivoman\\b</Pattern>
+    <Pattern>burger\\s+king</Pattern>
 </Category>

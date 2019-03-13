@@ -1,7 +1,6 @@
 package my.neomer.budget.activities.main;
 
 import android.content.Context;
-import android.icu.text.PluralRules;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import my.neomer.budget.R;
+import my.neomer.budget.core.types.TransactionCategory;
 import my.neomer.budget.models.Transaction;
 import my.neomer.budget.widgets.MoneyView;
 
@@ -47,8 +47,13 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
         transactionViewHolder.txtDetailedText.setText(transactionList.get(i).getDetailed());
         */
         transactionViewHolder.txtTransactionName.setText(transactionList.get(i).getDetailed());
-        transactionViewHolder.txtDetailedText.setText(transactionList.get(i).getDate().toString("yyyy-MM-dd HH:mm"));
+        transactionViewHolder.txtDate.setText(transactionList.get(i).getDate().toString("yyyy-MM-dd HH:mm"));
+        transactionViewHolder.txtDetailedText.setText("");
         transactionViewHolder.txtAmount.setMoney(transactionList.get(i).getAmount());
+        TransactionCategory category = transactionList.get(i).getCategory();
+        transactionViewHolder.txtCategory.setText(
+                transactionViewHolder.Context.getResources().getString(
+                        category != null ? category.getName() : R.string.empty_category));
     }
 
     @Override
@@ -70,6 +75,8 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
         public TextView txtTransactionName;
         public TextView txtDetailedText;
         public MoneyView txtAmount;
+        public TextView txtCategory;
+        public TextView txtDate;
         public Context Context;
 
         public TransactionViewHolder(@NonNull View itemView) {
@@ -78,6 +85,8 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
             txtTransactionName = itemView.findViewById(R.id.txtTransactionName);
             txtDetailedText = itemView.findViewById(R.id.txtFullText);
             txtAmount = itemView.findViewById(R.id.txtAmount);
+            txtCategory = itemView.findViewById(R.id.txtCategory);
+            txtDate = itemView.findViewById(R.id.txtDateTime);
             Context = itemView.getContext();
         }
     }

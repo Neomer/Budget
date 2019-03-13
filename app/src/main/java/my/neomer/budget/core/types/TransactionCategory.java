@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -15,18 +16,18 @@ import my.neomer.budget.core.AppContext;
 public final class TransactionCategory implements Cloneable {
 
     private int id;
-    private String name;
+    private int name;
     private Bitmap image;
     private List<Pattern> patterns;
 
-    public TransactionCategory(int id, String name, Bitmap image) {
+    public TransactionCategory(int id, int name, Bitmap image) {
         this.id = id;
         this.name = name;
         this.image = image;
         patterns = null;
     }
 
-    public TransactionCategory(int id, String name, Bitmap image, int patternResource) {
+    public TransactionCategory(int id, int name, Bitmap image, int patternResource) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -35,21 +36,34 @@ public final class TransactionCategory implements Cloneable {
     }
 
     private void loadPatterns(int resource) {
+        patterns = new ArrayList<>();
+
         XmlResourceParser xml = AppContext.getInstance().getResources().getXml(resource);
         try {
-            if (xml.getEventType() == XmlResourceParser.START_TAG) {
-                String s = xml.getName();
-
-                if (s.equals("Category")) {
-                    xml.next();
-                    if(xml.getName() != null && xml.getName().equalsIgnoreCase("Pattern")){
-                        patterns.add(Pattern.compile(xml.getText()));
+            while (xml.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (xml.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = xml.getName();
+                    if (name.toLowerCase().equals("pattern")) {
+                        while (xml.getEventType() != XmlResourceParser.TEXT && xml.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                            xml.next();
+                        }
+                        if (xml.getEventType() == XmlResourceParser.TEXT) {
+                            String text = xml.getText();
+                            if (text != null) {
+                                patterns.add(Pattern.compile(text, Pattern.CASE_INSENSITIVE));
+                            }
+                        }
                     }
                 }
+                xml.next();
             }
         } catch (XmlPullParserException e) {
             e.printStackTrace();
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -70,11 +84,11 @@ public final class TransactionCategory implements Cloneable {
         this.image = image;
     }
 
-    public String getName() {
+    public int getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(int name) {
         this.name = name;
     }
 
@@ -83,7 +97,7 @@ public final class TransactionCategory implements Cloneable {
             return false;
         }
         for(Pattern p : patterns) {
-            if (p.matcher(needle).matches()) {
+            if (p.matcher(needle).find()) {
                 return true;
             }
         }
@@ -93,7 +107,6 @@ public final class TransactionCategory implements Cloneable {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         TransactionCategory category = new TransactionCategory(getId(), getName(), getImage());
-        category.patterns = patterns;
         return  category;
     }
 }

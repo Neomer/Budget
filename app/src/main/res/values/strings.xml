@@ -8,8 +8,17 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
+    <string name="date">Date:</string>
+
     <string name="money_spend">Spend</string>
     <string name="money_income">Income</string>
+
+    <!-- transaction categories -->
+    <string name="empty_category">Without category</string>
+    <string name="food_category">Food</string>
+    <string name="medicine_category">Medicine</string>
+    <string name="clothes_category">Clothes</string>
+    <string name="home_category">Home</string>
 
     <!-- exception messages -->
 </resources>

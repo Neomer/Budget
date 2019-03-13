@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -54,6 +55,9 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
         transactionViewHolder.txtCategory.setText(
                 transactionViewHolder.Context.getResources().getString(
                         category != null ? category.getName() : R.string.empty_category));
+        transactionViewHolder.imageViewCategory.setImageDrawable(
+                transactionViewHolder.Context.getResources().getDrawable(
+                        category != null ? category.getImage() : R.mipmap.ic_launcher));
     }
 
     @Override
@@ -70,16 +74,17 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
         notifyDataSetChanged();
     }
 
-    public class TransactionViewHolder extends RecyclerView.ViewHolder {
+    class TransactionViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtTransactionName;
-        public TextView txtDetailedText;
-        public MoneyView txtAmount;
-        public TextView txtCategory;
-        public TextView txtDate;
-        public Context Context;
+        TextView txtTransactionName;
+        TextView txtDetailedText;
+        MoneyView txtAmount;
+        TextView txtCategory;
+        TextView txtDate;
+        ImageView imageViewCategory;
+        Context Context;
 
-        public TransactionViewHolder(@NonNull View itemView) {
+        TransactionViewHolder(@NonNull View itemView) {
             super(itemView);
 
             txtTransactionName = itemView.findViewById(R.id.txtTransactionName);
@@ -87,6 +92,7 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
             txtAmount = itemView.findViewById(R.id.txtAmount);
             txtCategory = itemView.findViewById(R.id.txtCategory);
             txtDate = itemView.findViewById(R.id.txtDateTime);
+            imageViewCategory = itemView.findViewById(R.id.imageViewCategory);
             Context = itemView.getContext();
         }
     }

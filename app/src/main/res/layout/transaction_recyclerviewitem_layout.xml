@@ -15,9 +15,9 @@
             android:padding="16dp">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewCategory"
                 android:layout_width="wrap_content"
-                android:layout_height="74dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
@@ -38,7 +38,7 @@
                 android:text="Transaction name"
                 android:textSize="18dp"
                 app:layout_constraintEnd_toStartOf="@+id/txtAmount"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintStart_toEndOf="@+id/imageViewCategory"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -50,8 +50,8 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Full text"
-                android:textSize="11sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/imageViewCategory"
                 app:layout_constraintTop_toBottomOf="@+id/txtTransactionName" />
 
             <my.neomer.budget.widgets.MoneyView
@@ -76,10 +76,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/date"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewCategory"
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
@@ -90,7 +90,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="10/12/19 15:45"
-                android:textSize="11sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/labelDate" />
 

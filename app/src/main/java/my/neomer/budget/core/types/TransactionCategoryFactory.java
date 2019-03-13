@@ -19,10 +19,10 @@ public class TransactionCategoryFactory {
 
     private TransactionCategoryFactory() {
         categoryList = new ArrayList<>();
-        categoryList.add(new TransactionCategory(0, R.string.food_category, null, R.xml.food_category_patterns));
-        categoryList.add(new TransactionCategory(1, R.string.medicine_category, null));
-        categoryList.add(new TransactionCategory(2, R.string.clothes_category, null));
-        categoryList.add(new TransactionCategory(3, R.string.home_category, null, R.xml.home_category_patterns));
+        categoryList.add(new TransactionCategory(0, R.string.food_category, R.drawable.ic_001_juice, R.xml.food_category_patterns));
+        categoryList.add(new TransactionCategory(1, R.string.medicine_category, R.drawable.ic_002_medicine));
+        categoryList.add(new TransactionCategory(2, R.string.clothes_category, R.drawable.ic_003_sweatshirt));
+        categoryList.add(new TransactionCategory(3, R.string.home_category, R.drawable.ic_004_paint_roller, R.xml.home_category_patterns));
     }
 
     public TransactionCategory getById(int id) {

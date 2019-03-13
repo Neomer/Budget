@@ -17,17 +17,17 @@ public final class TransactionCategory implements Cloneable {
 
     private int id;
     private int name;
-    private Bitmap image;
+    private int image;
     private List<Pattern> patterns;
 
-    public TransactionCategory(int id, int name, Bitmap image) {
+    public TransactionCategory(int id, int name, int image) {
         this.id = id;
         this.name = name;
         this.image = image;
         patterns = null;
     }
 
-    public TransactionCategory(int id, int name, Bitmap image, int patternResource) {
+    public TransactionCategory(int id, int name, int image, int patternResource) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -76,11 +76,11 @@ public final class TransactionCategory implements Cloneable {
         this.id = id;
     }
 
-    public Bitmap getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(Bitmap image) {
+    public void setImage(int image) {
         this.image = image;
     }
 

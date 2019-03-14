@@ -38,15 +38,6 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder transactionViewHolder, int i) {
-        String title = transactionList.get(i).getTitle();
-        /*
-        transactionViewHolder.txtTransactionName.setText(
-                title != null && !title.isEmpty() ? title :
-                        (transactionList.get(i).getType() == Transaction.TransactionType.Income ?
-                                transactionViewHolder.Context.getString(R.string.money_income) :
-                                transactionViewHolder.Context.getString(R.string.money_spend)));
-        transactionViewHolder.txtDetailedText.setText(transactionList.get(i).getDetailed());
-        */
         transactionViewHolder.txtTransactionName.setText(transactionList.get(i).getDetailed());
         transactionViewHolder.txtDate.setText(transactionList.get(i).getDate().toString("yyyy-MM-dd HH:mm"));
         transactionViewHolder.txtDetailedText.setText("");
@@ -57,7 +48,10 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
                         category != null ? category.getName() : R.string.empty_category));
         transactionViewHolder.imageViewCategory.setImageDrawable(
                 transactionViewHolder.Context.getResources().getDrawable(
-                        category != null ? category.getImage() : R.mipmap.ic_launcher));
+                        category != null ? category.getImage() : R.drawable.ic_005_faq));
+        transactionViewHolder.imageViewDirection.setImageDrawable(
+                transactionViewHolder.Context.getResources().getDrawable(
+                        transactionList.get(i).getType() == Transaction.TransactionType.Income ? R.drawable.ic_003_cursor : R.drawable.ic_004_down_arrow));
     }
 
     @Override
@@ -82,6 +76,7 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
         TextView txtCategory;
         TextView txtDate;
         ImageView imageViewCategory;
+        ImageView imageViewDirection;
         Context Context;
 
         TransactionViewHolder(@NonNull View itemView) {
@@ -93,6 +88,7 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
             txtCategory = itemView.findViewById(R.id.txtCategory);
             txtDate = itemView.findViewById(R.id.txtDateTime);
             imageViewCategory = itemView.findViewById(R.id.imageViewCategory);
+            imageViewDirection = itemView.findViewById(R.id.imageTransactionDirection);
             Context = itemView.getContext();
         }
     }

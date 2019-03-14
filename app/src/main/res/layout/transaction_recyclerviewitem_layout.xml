@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -15,15 +16,16 @@
             android:padding="16dp">
 
             <ImageView
-                android:id="@+id/imageViewCategory"
+                android:id="@+id/imageTransactionDirection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@drawable/ic_011_wallet" />
 
             <TextView
                 android:id="@+id/txtTransactionName"
@@ -35,10 +37,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:text="Transaction name"
+                android:text="MAGNIT"
                 android:textSize="18dp"
                 app:layout_constraintEnd_toStartOf="@+id/txtAmount"
-                app:layout_constraintStart_toEndOf="@+id/imageViewCategory"
+                app:layout_constraintStart_toEndOf="@+id/imageTransactionDirection"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -49,9 +51,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Full text"
+                android:layout_marginBottom="41dp"
+                android:text="  "
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/imageViewCategory"
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                app:layout_constraintStart_toEndOf="@+id/imageTransactionDirection"
                 app:layout_constraintTop_toBottomOf="@+id/txtTransactionName" />
 
             <my.neomer.budget.widgets.MoneyView
@@ -69,30 +73,32 @@
             <TextView
                 android:id="@+id/labelDate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="19dp"
                 android:layout_below="@+id/txtTransactionName"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/date"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewCategory"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toBottomOf="@+id/txtFullText" />
 
             <TextView
                 android:id="@+id/txtDateTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="10/12/19 15:45"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/labelDate" />
+                app:layout_constraintStart_toEndOf="@+id/labelDate"
+                app:layout_constraintTop_toBottomOf="@+id/txtFullText"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/txtCategory"
@@ -104,7 +110,18 @@
                 android:text="TextView"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/imageViewCategory" />
+
+            <ImageView
+                android:id="@+id/imageViewCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_001_juice" />
 
         </android.support.constraint.ConstraintLayout>
 

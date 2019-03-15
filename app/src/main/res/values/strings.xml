@@ -13,6 +13,14 @@
     <string name="money_spend">Spend</string>
     <string name="money_income">Income</string>
 
+    <!-- Main activity -->
+    <string name="category_image_content_description">Category image</string>
+    <string name="sample_transaction_name">MAGNIT</string>
+    <string name="sample_transaction_value">-14000</string>
+    <string name="sample_transaction_date">15/03/19 08:27</string>
+    <string name="sample_transaction_category">Food</string>
+
+
     <!-- transaction categories -->
     <string name="empty_category">Without category</string>
     <string name="food_category">Food</string>

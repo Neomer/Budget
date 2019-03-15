@@ -8,7 +8,10 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -16,16 +19,16 @@
             android:padding="16dp">
 
             <ImageView
-                android:id="@+id/imageTransactionDirection"
+                android:id="@+id/imageViewCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
+                android:contentDescription="@string/category_image_content_description"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_011_wallet" />
+                app:srcCompat="@drawable/ic_001_juice" />
 
             <TextView
                 android:id="@+id/txtTransactionName"
@@ -33,14 +36,12 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="MAGNIT"
-                android:textSize="18dp"
+                android:text="@string/sample_transaction_name"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/txtAmount"
-                app:layout_constraintStart_toEndOf="@+id/imageTransactionDirection"
+                app:layout_constraintStart_toEndOf="@+id/imageViewCategory"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -49,13 +50,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtTransactionName"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="41dp"
-                android:text="  "
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                app:layout_constraintStart_toEndOf="@+id/imageTransactionDirection"
+                app:layout_constraintStart_toEndOf="@+id/imageViewCategory"
                 app:layout_constraintTop_toBottomOf="@+id/txtTransactionName" />
 
             <my.neomer.budget.widgets.MoneyView
@@ -64,8 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="14000"
+                android:text="@string/sample_transaction_value"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -76,7 +73,6 @@
                 android:layout_height="19dp"
                 android:layout_below="@+id/txtTransactionName"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/date"
@@ -90,10 +86,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginLeft="12dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="10/12/19 15:45"
+                android:text="@string/sample_transaction_date"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/labelDate"
@@ -105,23 +100,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="TextView"
-                android:textSize="14sp"
+                android:text="@string/sample_transaction_category"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageViewCategory" />
-
-            <ImageView
-                android:id="@+id/imageViewCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/ic_001_juice" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

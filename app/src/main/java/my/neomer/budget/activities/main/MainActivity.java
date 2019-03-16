@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,9 @@ import my.neomer.budget.models.Transaction;
 
 public class MainActivity extends BaseBudgetActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        SmsReaderUpdateListener {
+        SmsReaderUpdateListener,
+        TransactionsRecyclerViewAdapter.OnItemClickListener
+{
 
     private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 0;
 
@@ -95,7 +98,7 @@ public class MainActivity extends BaseBudgetActivity
             resultList.addAll(loader.loadData());
         }
         */
-        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList);
+        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList, this);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
 
         SmsReaderService.getInstance().setContext(this);
@@ -192,5 +195,11 @@ public class MainActivity extends BaseBudgetActivity
     public void requestSmsPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.READ_SMS}, MY_PERMISSIONS_REQUEST_READ_SMS);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Transaction t = transactionsRecyclerViewAdapter.getTransactionList().get(position);
+        Toast.makeText(this, String.valueOf(t.getAmount().getAmount()), Toast.LENGTH_SHORT).show();
     }
 }

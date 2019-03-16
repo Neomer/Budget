@@ -3,6 +3,7 @@ package my.neomer.budget.models;
 import org.joda.time.DateTime;
 
 import my.neomer.budget.core.types.Money;
+import my.neomer.budget.core.types.TransactionCategory;
 
 public class Transaction {
 
@@ -12,12 +13,12 @@ public class Transaction {
     private Money balans;
     private DateTime date;
     private String bill;
+    private TransactionCategory category;
 
     public enum TransactionType {
         Spend,
         Income
     }
-
     private TransactionType type;
 
     public Transaction() {
@@ -62,7 +63,7 @@ public class Transaction {
         this.type = type;
     }
 
-    public Money getBalans() {
+    public Money getBalance() {
         return balans;
     }
 
@@ -84,6 +85,14 @@ public class Transaction {
 
     public void setBill(String bill) {
         this.bill = bill;
+    }
+
+    public TransactionCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(TransactionCategory category) {
+        this.category = category;
     }
 
 }

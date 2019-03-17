@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Category xmlns:android="http://schemas.android.com/apk/res/android">
-    <Pattern>\\.*naidy[\\-\\s]*\\.*</Pattern>
-    <Pattern>\\.*azbuka remonta</Pattern>
+    <Pattern>\\.*кредит\\.*</Pattern>
+    <Pattern>\\.*credit\\.*</Pattern>
 </Category>

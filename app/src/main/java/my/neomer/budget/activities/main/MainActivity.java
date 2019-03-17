@@ -39,6 +39,7 @@ import my.neomer.budget.R;
 import my.neomer.budget.activities.BaseBudgetActivity;
 import my.neomer.budget.core.DataLoader;
 import my.neomer.budget.core.DatabaseTransactionsLoader;
+import my.neomer.budget.core.TransactionsProvider;
 import my.neomer.budget.core.sms.SmsReaderService;
 import my.neomer.budget.core.sms.SmsReaderUpdateListener;
 import my.neomer.budget.core.types.Money;
@@ -63,7 +64,6 @@ public class MainActivity extends BaseBudgetActivity
     private CollapsingToolbarLayout collapsingToolbar;
     private PieChart chartView;
     private AppBarLayout appBarLayout;
-    private List<Transaction> transactionList;
 
     @Override
     protected void loadViews() {
@@ -92,6 +92,8 @@ public class MainActivity extends BaseBudgetActivity
         if (chartView == null) {
             return;
         }
+
+        List<Transaction> transactionList = TransactionsProvider.getInstance().getTransactions();
 
         if (transactionList != null) {
             Map<String, Double> categories = new HashMap<>();
@@ -172,13 +174,7 @@ public class MainActivity extends BaseBudgetActivity
         dataLoaders = new ArrayList<>();
         dataLoaders.add(new DatabaseTransactionsLoader());
 
-        List<Transaction> resultList = new ArrayList<>();
-        /*
-        for (DataLoader<Transaction> loader : dataLoaders) {
-            resultList.addAll(loader.loadData());
-        }
-        */
-        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList, this);
+        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(this);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
 
         SmsReaderService.getInstance().setContext(this);
@@ -289,8 +285,8 @@ public class MainActivity extends BaseBudgetActivity
 
     @Override
     public void updateList(List<Transaction> transactionList) {
-        transactionsRecyclerViewAdapter.setTransactionList(transactionList);
-        this.transactionList = transactionList;
+        TransactionsProvider.getInstance().appendTransactions(transactionList);
+        transactionsRecyclerViewAdapter.notifyDataSetChanged();
         updateChartValues();
     }
 
@@ -302,7 +298,7 @@ public class MainActivity extends BaseBudgetActivity
 
     @Override
     public void onItemClick(int position) {
-        Transaction t = transactionsRecyclerViewAdapter.getTransactionList().get(position);
+        Transaction t = TransactionsProvider.getInstance().getTransactions().get(position);
         Toast.makeText(this, String.valueOf(t.getAmount().getAmount()), Toast.LENGTH_SHORT).show();
     }
 }

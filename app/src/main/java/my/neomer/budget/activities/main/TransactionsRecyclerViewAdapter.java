@@ -1,7 +1,6 @@
 package my.neomer.budget.activities.main;
 
 import android.content.Context;
-import android.content.pm.LauncherApps;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,8 +29,7 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
     @Override
     public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.transaction_recyclerviewitem_layout, viewGroup, false);
-        TransactionViewHolder pvh = new TransactionViewHolder(v, onItemClickListener);
-        return pvh;
+        return new TransactionViewHolder(v, onItemClickListener);
     }
 
     @Override

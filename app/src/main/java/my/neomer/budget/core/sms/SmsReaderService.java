@@ -79,7 +79,7 @@ public class SmsReaderService {
         }
 
         List<Transaction> transactions = new ArrayList<>();
-        Cursor cursor = context.getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(Uri.parse("content://sms/inbox"), null, null, null, "date_sent desc");
 
         if (cursor.moveToFirst()) {
             do {

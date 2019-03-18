@@ -39,6 +39,7 @@ import my.neomer.budget.R;
 import my.neomer.budget.activities.BaseBudgetActivity;
 import my.neomer.budget.core.DataLoader;
 import my.neomer.budget.core.DatabaseTransactionsLoader;
+import my.neomer.budget.core.TransactionsProvider;
 import my.neomer.budget.core.sms.SmsReaderService;
 import my.neomer.budget.core.sms.SmsReaderUpdateListener;
 import my.neomer.budget.core.types.Money;
@@ -60,10 +61,7 @@ public class MainActivity extends BaseBudgetActivity
     private NavigationView navigationView;
     private TransactionsRecyclerViewAdapter transactionsRecyclerViewAdapter;
     private List<DataLoader<Transaction>> dataLoaders;
-    private CollapsingToolbarLayout collapsingToolbar;
-    private PieChart chartView;
     private AppBarLayout appBarLayout;
-    private List<Transaction> transactionList;
 
     @Override
     protected void loadViews() {
@@ -72,63 +70,8 @@ public class MainActivity extends BaseBudgetActivity
         fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        collapsingToolbar = findViewById(R.id.collapsingToolbar);
-        chartView = findViewById(R.id.chartView);
         appBarLayout = findViewById(R.id.appBarLayout);
     }
-
-    private void createChart() {
-        if (chartView == null) {
-            return;
-        }
-
-        chartView.setDragDecelerationFrictionCoef(0.9f);
-        chartView.setDrawHoleEnabled(true);
-        chartView.setHoleColor(getResources().getColor(R.color.colorPrimary));
-        updateChartValues();
-    }
-
-    private void updateChartValues() {
-        if (chartView == null) {
-            return;
-        }
-
-        if (transactionList != null) {
-            Map<String, Double> categories = new HashMap<>();
-            for (Transaction t : transactionList) {
-                if (t.getAmount().getAmount() < 0) {
-                    String tName = getResources().getString(t.getCategory() != null ? t.getCategory().getName() : R.string.empty_category);
-                    if (categories.containsKey(tName)) {
-                        double val = categories.get(tName);
-                        categories.put(tName, val + t.getAmount().getAmount());
-                    } else {
-                        categories.put(tName, t.getAmount().getAmount());
-                    }
-                }
-            }
-
-
-            List<PieEntry> entries = new ArrayList<PieEntry>();
-            for (String c : categories.keySet()) {
-                entries.add(new PieEntry(Math.abs(categories.get(c).floatValue()), c));
-            }
-            PieDataSet dataSet = new PieDataSet(entries, null);
-            dataSet.setColors(ColorTemplate.PASTEL_COLORS);
-
-            PieData pieData = new PieData(dataSet);
-            pieData.setValueFormatter(new IValueFormatter() {
-                @Override
-                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                    return new DefaultMoneyTextFormatter().formatValue(new Money(value, null));
-                }
-            });
-            pieData.setValueTextColor(Color.BLACK);
-            pieData.setValueTextSize(13f);
-
-            chartView.setData(pieData);
-        }
-    }
-
 
     @Override
     protected void onResume() {
@@ -146,10 +89,6 @@ public class MainActivity extends BaseBudgetActivity
     @Override
     protected void postCreationActions() {
         setSupportActionBar(toolbar);
-
-        createChart();
-        setupCollapsingToolbar();
-
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,37 +111,10 @@ public class MainActivity extends BaseBudgetActivity
         dataLoaders = new ArrayList<>();
         dataLoaders.add(new DatabaseTransactionsLoader());
 
-        List<Transaction> resultList = new ArrayList<>();
-        /*
-        for (DataLoader<Transaction> loader : dataLoaders) {
-            resultList.addAll(loader.loadData());
-        }
-        */
-        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList, this);
+        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(this);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
 
         SmsReaderService.getInstance().setContext(this);
-    }
-
-    private void setupCollapsingToolbar() {
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = true;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
-                }
-            }
-        });
     }
 
     @Override
@@ -289,9 +201,8 @@ public class MainActivity extends BaseBudgetActivity
 
     @Override
     public void updateList(List<Transaction> transactionList) {
-        transactionsRecyclerViewAdapter.setTransactionList(transactionList);
-        this.transactionList = transactionList;
-        updateChartValues();
+        TransactionsProvider.getInstance().appendTransactions(transactionList);
+        transactionsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -302,7 +213,7 @@ public class MainActivity extends BaseBudgetActivity
 
     @Override
     public void onItemClick(int position) {
-        Transaction t = transactionsRecyclerViewAdapter.getTransactionList().get(position);
+        Transaction t = TransactionsProvider.getInstance().getTransactions().get(position);
         Toast.makeText(this, String.valueOf(t.getAmount().getAmount()), Toast.LENGTH_SHORT).show();
     }
 }

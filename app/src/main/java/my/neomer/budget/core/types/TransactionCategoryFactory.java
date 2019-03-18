@@ -23,6 +23,8 @@ public class TransactionCategoryFactory {
         categoryList.add(new TransactionCategory(1, R.string.medicine_category, R.drawable.ic_002_medicine));
         categoryList.add(new TransactionCategory(2, R.string.clothes_category, R.drawable.ic_003_sweatshirt));
         categoryList.add(new TransactionCategory(3, R.string.home_category, R.drawable.ic_004_paint_roller, R.xml.home_category_patterns));
+        categoryList.add(new TransactionCategory(4, R.string.credit_category, R.drawable.ic_005_payment, R.xml.credit_category_patterns));
+        categoryList.add(new TransactionCategory(5, R.string.credit_category, R.drawable.ic_005_payment, R.xml.credit_category_patterns));
     }
 
     public TransactionCategory getById(int id) {

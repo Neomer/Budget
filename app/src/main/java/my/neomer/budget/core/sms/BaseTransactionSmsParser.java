@@ -34,6 +34,7 @@ public abstract class BaseTransactionSmsParser implements TransactionSmsParser {
             fillTransaction(matcher, transaction, sms);
         }
 
+        transaction.setId(sms.getId());
         transaction.setCategory(TransactionCategoryFactory.getInstance().findByPattern(transaction.getDetailed()));
 
         return transaction;

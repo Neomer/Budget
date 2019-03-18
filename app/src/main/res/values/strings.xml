@@ -27,6 +27,7 @@
     <string name="medicine_category">Medicine</string>
     <string name="clothes_category">Clothes</string>
     <string name="home_category">Home</string>
+    <string name="credit_category">Credit</string>
 
     <!-- exception messages -->
 </resources>

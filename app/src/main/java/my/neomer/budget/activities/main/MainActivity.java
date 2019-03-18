@@ -2,32 +2,49 @@ package my.neomer.budget.activities.main;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import my.neomer.budget.R;
 import my.neomer.budget.activities.BaseBudgetActivity;
 import my.neomer.budget.core.DataLoader;
 import my.neomer.budget.core.DatabaseTransactionsLoader;
+import my.neomer.budget.core.TransactionsProvider;
 import my.neomer.budget.core.sms.SmsReaderService;
 import my.neomer.budget.core.sms.SmsReaderUpdateListener;
+import my.neomer.budget.core.types.Money;
 import my.neomer.budget.models.Transaction;
+import my.neomer.budget.widgets.DefaultMoneyTextFormatter;
 
 public class MainActivity extends BaseBudgetActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -44,6 +61,7 @@ public class MainActivity extends BaseBudgetActivity
     private NavigationView navigationView;
     private TransactionsRecyclerViewAdapter transactionsRecyclerViewAdapter;
     private List<DataLoader<Transaction>> dataLoaders;
+    private AppBarLayout appBarLayout;
 
     @Override
     protected void loadViews() {
@@ -52,6 +70,7 @@ public class MainActivity extends BaseBudgetActivity
         fab = findViewById(R.id.fab);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
+        appBarLayout = findViewById(R.id.appBarLayout);
     }
 
     @Override
@@ -92,13 +111,7 @@ public class MainActivity extends BaseBudgetActivity
         dataLoaders = new ArrayList<>();
         dataLoaders.add(new DatabaseTransactionsLoader());
 
-        List<Transaction> resultList = new ArrayList<>();
-        /*
-        for (DataLoader<Transaction> loader : dataLoaders) {
-            resultList.addAll(loader.loadData());
-        }
-        */
-        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(resultList, this);
+        transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(this);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);
 
         SmsReaderService.getInstance().setContext(this);
@@ -188,7 +201,8 @@ public class MainActivity extends BaseBudgetActivity
 
     @Override
     public void updateList(List<Transaction> transactionList) {
-        transactionsRecyclerViewAdapter.setTransactionList(transactionList);
+        TransactionsProvider.getInstance().appendTransactions(transactionList);
+        transactionsRecyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -199,7 +213,7 @@ public class MainActivity extends BaseBudgetActivity
 
     @Override
     public void onItemClick(int position) {
-        Transaction t = transactionsRecyclerViewAdapter.getTransactionList().get(position);
+        Transaction t = TransactionsProvider.getInstance().getTransactions().get(position);
         Toast.makeText(this, String.valueOf(t.getAmount().getAmount()), Toast.LENGTH_SHORT).show();
     }
 }

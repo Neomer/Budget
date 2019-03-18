@@ -1,7 +1,6 @@
 package my.neomer.budget.activities.main;
 
 import android.content.Context;
-import android.content.pm.LauncherApps;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,21 +12,16 @@ import android.widget.TextView;
 import java.util.List;
 
 import my.neomer.budget.R;
+import my.neomer.budget.core.TransactionsProvider;
 import my.neomer.budget.core.types.TransactionCategory;
 import my.neomer.budget.models.Transaction;
 import my.neomer.budget.widgets.MoneyView;
 
 public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<TransactionsRecyclerViewAdapter.TransactionViewHolder> {
 
-    private List<Transaction> transactionList;
     private OnItemClickListener onItemClickListener;
 
-    public TransactionsRecyclerViewAdapter(List<Transaction> transactionList, OnItemClickListener onItemClickListener) throws NullPointerException {
-        if (transactionList == null)
-        {
-            throw new NullPointerException("Transaction list must not be null!");
-        }
-        this.transactionList = transactionList;
+    public TransactionsRecyclerViewAdapter(OnItemClickListener onItemClickListener) throws NullPointerException {
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -35,12 +29,13 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
     @Override
     public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.transaction_recyclerviewitem_layout, viewGroup, false);
-        TransactionViewHolder pvh = new TransactionViewHolder(v, onItemClickListener);
-        return pvh;
+        return new TransactionViewHolder(v, onItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TransactionViewHolder transactionViewHolder, int i) {
+        List<Transaction> transactionList = TransactionsProvider.getInstance().getTransactions();
+
         transactionViewHolder.txtTransactionName.setText(transactionList.get(i).getDetailed());
         transactionViewHolder.txtDate.setText(transactionList.get(i).getDate().toString("yyyy-MM-dd HH:mm"));
         transactionViewHolder.txtDetailedText.setText("");
@@ -56,16 +51,7 @@ public class TransactionsRecyclerViewAdapter extends RecyclerView.Adapter<Transa
 
     @Override
     public int getItemCount() {
-        return transactionList.size();
-    }
-
-    public List<Transaction> getTransactionList() {
-        return transactionList;
-    }
-
-    public void setTransactionList(List<Transaction> transactionList) {
-        this.transactionList = transactionList;
-        notifyDataSetChanged();
+        return TransactionsProvider.getInstance().getTransactions().size();
     }
 
     class TransactionViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

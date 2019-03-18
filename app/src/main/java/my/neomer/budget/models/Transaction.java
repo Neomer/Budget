@@ -14,6 +14,7 @@ public class Transaction {
     private DateTime date;
     private String bill;
     private TransactionCategory category;
+    private int id;
 
     public enum TransactionType {
         Spend,
@@ -93,6 +94,14 @@ public class Transaction {
 
     public void setCategory(TransactionCategory category) {
         this.category = category;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

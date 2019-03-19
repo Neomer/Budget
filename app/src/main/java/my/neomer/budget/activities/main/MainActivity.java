@@ -2,10 +2,8 @@ package my.neomer.budget.activities.main;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,30 +19,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.ViewPortHandler;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import my.neomer.budget.R;
 import my.neomer.budget.activities.BaseBudgetActivity;
 import my.neomer.budget.core.DataLoader;
-import my.neomer.budget.core.DatabaseTransactionsLoader;
 import my.neomer.budget.core.TransactionsProvider;
+import my.neomer.budget.core.database.TransactionsDatabaseHelper;
 import my.neomer.budget.core.sms.SmsReaderService;
 import my.neomer.budget.core.sms.SmsReaderUpdateListener;
-import my.neomer.budget.core.types.Money;
 import my.neomer.budget.models.Transaction;
-import my.neomer.budget.widgets.DefaultMoneyTextFormatter;
 
 public class MainActivity extends BaseBudgetActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -109,7 +94,6 @@ public class MainActivity extends BaseBudgetActivity
         transactionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         dataLoaders = new ArrayList<>();
-        dataLoaders.add(new DatabaseTransactionsLoader());
 
         transactionsRecyclerViewAdapter = new TransactionsRecyclerViewAdapter(this);
         transactionRecyclerView.setAdapter(transactionsRecyclerViewAdapter);

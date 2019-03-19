@@ -14,7 +14,7 @@ class DataLoaderProviderImpl<T> implements DataLoaderProvider<T> {
     @Override
     public void update() {
         for (DataLoader<T> l : loadersList) {
-            l.loadData();
+            l.LoadAll();
         }
     }
 

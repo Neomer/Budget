@@ -1,20 +1,26 @@
 package my.neomer.budget.models;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
 import org.joda.time.DateTime;
+
+import java.io.Serializable;
 
 import my.neomer.budget.core.types.Money;
 import my.neomer.budget.core.types.TransactionCategory;
 
+@Entity(active = true, nameInDb = "Transactions")
 public class Transaction {
 
     private String title;
     private String detailed;
     private Money amount;
-    private Money balans;
+    private Money balance;
     private DateTime date;
     private String bill;
     private TransactionCategory category;
-    private int id;
+    @Id
+    private long id;
 
     public enum TransactionType {
         Spend,
@@ -65,11 +71,11 @@ public class Transaction {
     }
 
     public Money getBalance() {
-        return balans;
+        return balance;
     }
 
     public void setBalance(Money balans) {
-        this.balans = balans;
+        this.balance = balans;
     }
 
     public DateTime getDate() {
@@ -96,11 +102,11 @@ public class Transaction {
         this.category = category;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface DataLoader<Type> {
 
-    List<Type> loadData();
+    List<Type> LoadAll();
 
 }

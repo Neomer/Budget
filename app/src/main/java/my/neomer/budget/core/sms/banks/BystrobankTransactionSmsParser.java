@@ -104,13 +104,13 @@ public class BystrobankTransactionSmsParser extends BaseTransactionSmsParser {
                 transaction.setAmount(
                         new Money(
                                 transaction.getType() == Transaction.TransactionType.Income ? Double.valueOf(sumString.trim()) : -Double.valueOf(sumString.trim()),
-                                currencyString != null ? CurrencyFactory.getCurrencyByShortName(currencyString.trim()) : null));
+                                currencyString != null ? CurrencyFactory.getInstance().getCurrencyByShortName(currencyString.trim()) : null));
             }
             if (sumString != null) {
                 transaction.setBalance(
                         new Money(
                                 Double.valueOf(balanceSumString.trim()),
-                                balanceCurrencyString != null ? CurrencyFactory.getCurrencyByShortName(balanceCurrencyString.trim()) : null));
+                                balanceCurrencyString != null ? CurrencyFactory.getInstance().getCurrencyByShortName(balanceCurrencyString.trim()) : null));
             }
         } catch (NumberFormatException e) {
             throw new SmsFormatException("Transaction sum wrong format '" + sumString + "'");

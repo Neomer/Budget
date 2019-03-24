@@ -97,13 +97,13 @@ public class SbTransactionSmsParser extends BaseTransactionSmsParser {
                 transaction.setAmount(
                         new Money(
                                 transaction.getType() == Transaction.TransactionType.Income ? Double.valueOf(sumString.trim()) : -Double.valueOf(sumString.trim()),
-                                currencyString != null ? CurrencyFactory.getCurrencyByShortName(currencyString) : null));
+                                currencyString != null ? CurrencyFactory.getInstance().getCurrencyByShortName(currencyString) : null));
             }
             if (balanceSumString != null) {
                 transaction.setBalance(
                         new Money(
                                 Double.valueOf(balanceSumString.trim()),
-                                balanceCurrencyString != null ? CurrencyFactory.getCurrencyByShortName(balanceCurrencyString) : null));
+                                balanceCurrencyString != null ? CurrencyFactory.getInstance().getCurrencyByShortName(balanceCurrencyString) : null));
             }
         } catch (NumberFormatException e) {
             throw new SmsFormatException("Transaction sum wrong format '" + sumString + "'");

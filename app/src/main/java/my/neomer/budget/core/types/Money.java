@@ -6,7 +6,13 @@ public final class Money {
     private Currency currency;
 
     public Money() {
+        this.amount = 0;
+        this.currency = null;
+    }
 
+    public Money(double amount) {
+        this.amount = amount;
+        this.currency = null;
     }
 
     public Money(double amount, Currency currency) {

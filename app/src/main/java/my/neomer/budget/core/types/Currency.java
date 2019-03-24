@@ -5,15 +5,17 @@ public class Currency {
     private String fullName;
     private String shortName;
     private String symbol;
+    private int id;
 
-    public Currency() {
-
-    }
-
-    public Currency(String fullName, String shortName, String symbol) {
+    public Currency(int id, String shortName, String fullName, String symbol) {
         this.fullName = fullName;
         this.shortName = shortName;
         this.symbol = symbol;
+        this.id = id;
+    }
+
+    public Currency() {
+
     }
 
     public String getFullName() {
@@ -38,5 +40,13 @@ public class Currency {
 
     public void setSymbol(String symbol) {
         this.symbol = symbol;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

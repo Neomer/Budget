@@ -1,75 +1,72 @@
 package my.neomer.budget.core.types;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.Html;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import my.neomer.budget.core.AppContext;
+import my.neomer.budget.core.database.DatabaseHelper;
 
 public class CurrencyFactory {
 
+    //region sigleton
+    private static final CurrencyFactory ourInstance = new CurrencyFactory();
+
+    public static CurrencyFactory getInstance() {
+        return ourInstance;
+    }
+    //endregion
+
+    private List<Currency> currencyList;
+
     private CurrencyFactory() {
-
+        currencyList = new ArrayList<>();
     }
 
-    public static Currency getCurrencyByShortName(String name) {
-        switch (name.toLowerCase()) {
-            case "р":
-            case "руб":
-            case "rub":
-                return new Currency("Rouble", "RUB", Html.fromHtml(" &#x20bd").toString());
+    public void loadRegisteredCurrencies(@NonNull Context context) {
+        SQLiteDatabase db = AppContext.getInstance().getDatabaseHelper().getReadableDatabase();
+        Cursor c = db.query("currency", null, null,null,null,null,null);
+        if (c.moveToFirst()) {
+            int idColIndex = c.getColumnIndex("id");
+            int shortNameColIndex = c.getColumnIndex("shortname");
+            int fullNameColIndex = c.getColumnIndex("fullname");
+            int symbolColIndex = c.getColumnIndex("symbol");
 
-            case "usd":
-                return new Currency("United States Dollar", "USD", Html.fromHtml(" &#x0024").toString());
-
-            case "gbp":
-                return new Currency("Pound Sterling", "GBP", Html.fromHtml(" &#x00a3").toString());
-
-            default:
-                return null;
+            do {
+                currencyList.add(new Currency(
+                        c.getInt(idColIndex),
+                        context.getString(c.getInt(shortNameColIndex)),
+                        context.getString(c.getInt(fullNameColIndex)),
+                        c.getString(symbolColIndex)
+                ));
+            } while (c.moveToNext());
         }
+        c.close();
     }
 
-    public static Currency getCurrencyByFullName(String name) {
-        switch (name.toLowerCase()) {
-            case "rouble":
-                return new Currency("Rouble", "RUB", Html.fromHtml(" &#x20bd").toString());
-
-            case "united states dollar":
-                return new Currency("United States Dollar", "USD", Html.fromHtml(" &#x0024").toString());
-
-            case "pound sterling":
-                return new Currency("Pound Sterling", "GBP", Html.fromHtml(" &#x00a3").toString());
-
-            default:
-                return null;
+    @Nullable
+    public Currency getCurrencyByShortName(String name) {
+        for (Currency c : currencyList) {
+            if (c.getShortName().equals(name)) {
+                return c;
+            }
         }
-
+        return null;
     }
 
-    public  static Currency getCurrencyByCountry(String country) {
-        switch (country.toLowerCase()) {
-            case "rus":
-            case "russia":
-                return new Currency("Rouble", "RUB", Html.fromHtml(" &#x20bd").toString());
-
-            case "usa":
-            case "united states of america":
-            case "east timor":
-            case "ecuador":
-            case "el salvador":
-            case "republic of el salvador":
-            case "federated states of micronesia":
-            case "marshall islands":
-            case "palau":
-            case "panama":
-            case "zimbabwe":
-                return new Currency("United States Dollar", "USD", Html.fromHtml(" &#x0024").toString());
-
-            case "Guernsey":
-            case "gb":
-            case "great britain":
-                return new Currency("Pound Sterling", "GBP", Html.fromHtml(" &#x00a3").toString());
-
-            default:
-                return null;
+    @Nullable
+    public Currency getCurrencyByFullName(String name) {
+        for (Currency c : currencyList) {
+            if (c.getFullName().equals(name)) {
+                return c;
+            }
         }
+        return null;
     }
-
 }

@@ -1,6 +1,7 @@
 package my.neomer.budget.core.types;
 
 import android.content.res.XmlResourceParser;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -12,23 +13,27 @@ import java.util.regex.Pattern;
 
 import my.neomer.budget.R;
 import my.neomer.budget.core.AppContext;
+import my.neomer.budget.models.AbstractEntity;
 
-public final class TransactionCategory implements Cloneable {
+public final class TransactionCategory extends AbstractEntity<Integer> implements Cloneable {
 
-    private int id;
     private int name;
     private int image;
     private List<Pattern> patterns;
 
+    public TransactionCategory() {
+        super();
+    }
+
     public TransactionCategory(int id, int name, int image) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.image = image;
         patterns = null;
     }
 
     public TransactionCategory(int id, int name, int image, int patternResource) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.image = image;
 
@@ -68,14 +73,6 @@ public final class TransactionCategory implements Cloneable {
         }
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getImage() {
         return image;
     }
@@ -108,5 +105,16 @@ public final class TransactionCategory implements Cloneable {
     protected Object clone() throws CloneNotSupportedException {
         TransactionCategory category = new TransactionCategory(getId(), getName(), getImage());
         return  category;
+    }
+
+    @Override
+    public void map(Cursor c) {
+        int idColIdx = c.getColumnIndex("id");
+        int nameColIdx = c.getColumnIndex("name");
+        int imageColIdx = c.getColumnIndex("image");
+
+        setId(c.getInt(idColIdx));
+        setName(c.getInt(nameColIdx));
+        setImage(c.getInt(imageColIdx));
     }
 }

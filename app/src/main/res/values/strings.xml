@@ -29,5 +29,13 @@
     <string name="home_category">Home</string>
     <string name="credit_category">Credit</string>
 
+    <!-- currencies -->
+    <string name="rouble_short">RUB</string>
+    <string name="rouble_fullname">Rouble</string>
+    <string name="dollar_short">USD</string>
+    <string name="dollar_fullname">U.S. Dollar</string>
+    <string name="euro_short">EUR</string>
+    <string name="euro_fullname">Euro</string>
+
     <!-- exception messages -->
 </resources>

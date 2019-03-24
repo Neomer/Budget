@@ -1,25 +1,51 @@
 package my.neomer.budget.models;
 
+import android.database.Cursor;
+
 import org.joda.time.DateTime;
 
+import my.neomer.budget.core.database.EntityManager;
+import my.neomer.budget.core.database.TransactionManager;
 import my.neomer.budget.core.types.Money;
 import my.neomer.budget.core.types.TransactionCategory;
 
-public class Transaction {
+public class Transaction extends AbstractEntity<Integer>  {
 
+    @DatabaseField(Name = "sms_id")
+    private int smsId;
     private String title;
     private String detailed;
     private Money amount;
-    private Money balans;
+    private Money balance;
     private DateTime date;
     private String bill;
     private TransactionCategory category;
     private int id;
 
+    @Override
+    public void map(Cursor c) {
+        int idColIdx = c.getColumnIndex("id");
+        int smsIdColIdx = c.getColumnIndex("sms_id");
+        int titleColIdx = c.getColumnIndex("title");
+        int billColIdx = c.getColumnIndex("bill");
+        int amountColIdx = c.getColumnIndex("amount");
+        int transactionTypeColIdx = c.getColumnIndex("transactionType");
+        int categoryColIdx = c.getColumnIndex("category");
+
+        setId(c.getInt(idColIdx));
+        setSmsId(c.getInt(smsIdColIdx));
+        setTitle(c.getString(titleColIdx));
+        setBill(String.valueOf(c.getInt(billColIdx)));
+        setAmount(new Money(c.getDouble(amountColIdx)));
+        setType(TransactionType.valueOf(c.getString(transactionTypeColIdx)));
+        category = null;
+    }
+
     public enum TransactionType {
         Spend,
         Income
     }
+
     private TransactionType type;
 
     public Transaction() {
@@ -65,11 +91,11 @@ public class Transaction {
     }
 
     public Money getBalance() {
-        return balans;
+        return balance;
     }
 
-    public void setBalance(Money balans) {
-        this.balans = balans;
+    public void setBalance(Money balance) {
+        this.balance = balance;
     }
 
     public DateTime getDate() {
@@ -96,12 +122,11 @@ public class Transaction {
         this.category = category;
     }
 
-    public int getId() {
-        return id;
+    public int getSmsId() {
+        return smsId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSmsId(int smsId) {
+        this.smsId = smsId;
     }
-
 }
